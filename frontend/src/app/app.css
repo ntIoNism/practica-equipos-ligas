@@ -1,0 +1,49 @@
+/* Tarjetas */
+.card {
+    border: 1px solid #dee2e6;
+}
+.card-header {
+    padding: 0.65rem 1rem;
+}
+
+/* Formularios */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.35rem;
+}
+.form-control, .form-select {
+    min-height: 38px;
+}
+
+/* Tablas */
+.table {
+    color: #212529;
+    font-size: 0.95rem;
+}
+.table th, .table td {
+    color: #212529;
+    vertical-align: middle;
+}
+.table thead th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Botones */
+.btn {
+    white-space: nowrap;
+}
+
+/* Pestañas */
+.nav-tabs .nav-link {
+    font-weight: 500;
+    padding: 0.55rem 1rem;
+}
+.nav-tabs .nav-link.active {
+    font-weight: 600;
+}
+
+/* Evita demasiado espacio interno */
+.card-body {
+    padding: 1rem;
+}

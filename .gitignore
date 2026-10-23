@@ -1,0 +1,33 @@
+# .NET
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+
+# Angular / Node
+**/node_modules/
+**/dist/
+.angular/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+
+# Variables locales
+.env
+.env.*
+!.env.example
+
+# Configuración local
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# IDE
+.idea/
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,444 @@
+<!-- ENCABEZADO -->
+<div class="bg-dark text-white py-4 mb-4">
+  <div class="container">
+    <h1 class="mb-0">
+      Practica de Equipos y Ligas
+    </h1>
+  </div>
+</div>
+
+<div class="container-fluid px-4 px-xl-5 pb-4">
+  <!-- PESTAÑAS -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab === 'equipos'" (click)="activeTab = 'equipos'">
+        Equipos
+      </button>
+    </li>
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab === 'ligas'" (click)="activeTab = 'ligas'">
+        Ligas
+      </button>
+    </li>
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab === 'inscripciones'"
+        (click)="activeTab = 'inscripciones'">
+        Inscripciones
+      </button>
+    </li>
+  </ul>
+
+  <!-- EQUIPOS -->
+  @if (activeTab === 'equipos') {
+  <div class="row gx-5 gy-4">
+    <!-- LADO IZQUIERDO -->
+    <!-- Formulario -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            Registro de equipo
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="guardarEquipo()">
+            <!-- Nombre -->
+            <div class="mb-3">
+              <label class="form-label">
+                Nombre
+              </label>
+              <input type="text" class="form-control" name="name" [(ngModel)]="teamForm.name" minlength="2"
+                maxlength="50" placeholder="Nombre del equipo" required>
+            </div>
+            <!-- País -->
+            <div class="mb-3">
+              <label class="form-label">
+                País
+              </label>
+              <input type="text" class="form-control" name="country" [(ngModel)]="teamForm.country" minlength="2"
+                maxlength="50" placeholder="País" required>
+            </div>
+            <!-- Jugadores -->
+            <div class="mb-3">
+              <label class="form-label">
+                Cantidad de jugadores
+              </label>
+              <input type="number" class="form-control" name="playersQuantity" [(ngModel)]="teamForm.playersQuantity"
+                min="11" max="22" required>
+              <div class="form-text">
+                Entre 11 y 22 jugadores.
+              </div>
+            </div>
+            <!-- Estado -->
+            <div class="form-check mb-4">
+              <input type="checkbox" class="form-check-input" id="teamEnabled" name="enabled"
+                [(ngModel)]="teamForm.enabled">
+              <label class="form-check-label" for="teamEnabled">
+                Equipo activo
+              </label>
+            </div>
+            <!-- Botones -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                @if (editingTeam) {
+                  Actualizar equipo
+                } @else {
+                  Guardar equipo
+                }
+              </button>
+              @if (editingTeam) {
+              <button type="button" class="btn btn-secondary" (click)="limpiarEquipo()">
+                Cancelar
+              </button>
+              }
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- LADO DERECHO -->
+    <!-- Tabla -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            Equipos registrados
+          </h5>
+          <span class="badge bg-primary">
+            {{ teams.length }} equipos
+          </span>
+        </div>
+        <div class="card-body">
+          @if (teams.length === 0) {
+          <div class="alert alert-info mb-0">
+            No hay equipos registrados.
+          </div>
+          } @else {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>País</th>
+                  <th>Jugadores</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (team of teams; track team.id) {
+                <tr>
+                  <td>
+                    {{ team.id }}
+                  </td>
+                  <td>
+                    {{ team.name }}
+                  </td>
+                  <td>
+                    {{ team.country }}
+                  </td>
+                  <td>
+                    {{ team.playersQuantity }}
+                  </td>
+                  <td>
+                    @if (team.enabled) {
+                    <span class="badge bg-success">
+                      Activo
+                    </span>
+                    } @else {
+                    <span class="badge bg-secondary">
+                      Inactivo
+                    </span>
+                    }
+                  </td>
+                  <td>
+                    <div class="d-flex gap-2">
+                      <button type="button" class="btn btn-warning btn-sm" (click)="editarEquipo(team)">
+                        Editar
+                      </button>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="eliminarEquipo(team.id)">
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- LIGAS -->
+  @if (activeTab === 'ligas') {
+  <div class="row gx-5 gy-4">
+    <!-- LADO IZQUIERDO -->
+    <!-- Formulario -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">
+            Registro de liga
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="guardarLiga()">
+            <!-- Nombre -->
+            <div class="mb-3">
+              <label class="form-label">
+                Nombre
+              </label>
+              <input type="text" class="form-control" name="leagueName" [(ngModel)]="leagueForm.name" minlength="2"
+                maxlength="50" placeholder="Nombre de la liga" required>
+            </div>
+            <!-- País -->
+            <div class="mb-3">
+              <label class="form-label">
+                País
+              </label>
+              <input type="text" class="form-control" name="leagueCountry" [(ngModel)]="leagueForm.country"
+                minlength="2" maxlength="50" placeholder="País" required>
+            </div>
+            <!-- Fecha inicio -->
+            <div class="mb-3">
+              <label class="form-label">
+                Fecha de inicio
+              </label>
+              <input type="date" class="form-control" name="startDate" [(ngModel)]="leagueForm.startDate" required>
+            </div>
+            <!-- Fecha fin -->
+            <div class="mb-3">
+              <label class="form-label">
+                Fecha de fin
+              </label>
+              <input type="date" class="form-control" name="endDate" [(ngModel)]="leagueForm.endDate" required>
+            </div>
+            <!-- Estado -->
+            <div class="form-check mb-4">
+              <input type="checkbox" class="form-check-input" id="leagueEnabled" name="leagueEnabled"
+                [(ngModel)]="leagueForm.enabled">
+              <label class="form-check-label" for="leagueEnabled">
+                Liga activa
+              </label>
+            </div>
+            <!-- Botones -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success">
+                @if (editingLeague) {
+                  Actualizar liga
+                } @else {
+                  Guardar liga
+                }
+              </button>
+              @if (editingLeague) {
+              <button type="button" class="btn btn-secondary" (click)="limpiarLiga()">
+                Cancelar
+              </button>
+              }
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- LADO DERECHO -->
+    <!-- Tabla -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            Ligas registradas
+          </h5>
+          <span class="badge bg-success">
+            {{ leagues.length }} ligas
+          </span>
+        </div>
+        <div class="card-body">
+          @if (leagues.length === 0) {
+          <div class="alert alert-info mb-0">
+            No hay ligas registradas.
+          </div>
+          } @else {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>País</th>
+                  <th>Inicio</th>
+                  <th>Fin</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (league of leagues; track league.id) {
+                <tr>
+                  <td>
+                    {{ league.id }}
+                  </td>
+                  <td>
+                    {{ league.name }}
+                  </td>
+                  <td>
+                    {{ league.country }}
+                  </td>
+                  <td>
+                    {{ league.startDate }}
+                  </td>
+                  <td>
+                    {{ league.endDate }}
+                  </td>
+                  <td>
+                    @if (league.enabled) {
+                    <span class="badge bg-success">
+                      Activa
+                    </span>
+                    } @else {
+                    <span class="badge bg-secondary">
+                      Inactiva
+                    </span>
+                    }
+                  </td>
+                  <td>
+                    <div class="d-flex gap-2">
+                      <button type="button" class="btn btn-warning btn-sm" (click)="editarLiga(league)">
+                        Editar
+                      </button>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="eliminarLiga(league.id)">
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- INSCRIPCIONES -->
+  @if (activeTab === 'inscripciones') {
+  <div class="row gx-5 gy-4">
+    <!-- LADO IZQUIERDO -->
+    <!-- Formulario -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">
+            Nueva inscripción
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="inscribirEquipo()">
+            <!-- Liga -->
+            <div class="mb-3">
+              <label class="form-label">
+                Liga
+              </label>
+              <select class="form-select" name="selectedLeague" [(ngModel)]="selectedLeagueId" required>
+                <option [ngValue]="null">
+                  Selecciona una liga
+                </option>
+                @for (league of leagues; track league.id) {
+                <option [ngValue]="league.id">
+                  {{ league.name }}
+                </option>
+                }
+              </select>
+            </div>
+            <!-- Equipo -->
+            <div class="mb-4">
+              <label class="form-label">
+                Equipo
+              </label>
+              <select class="form-select" name="selectedTeam" [(ngModel)]="selectedTeamId" required>
+                <option [ngValue]="null">
+                  Selecciona un equipo
+                </option>
+                @for (team of teams; track team.id) {
+                <option [ngValue]="team.id">
+                  {{ team.name }}
+                </option>
+                }
+              </select>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-dark">
+                Inscribir equipo
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- LADO DERECHO -->
+    <!-- Tabla -->
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            Equipos inscritos
+          </h5>
+          <span class="badge bg-dark">
+            {{ leagueTeams.length }} inscripciones
+          </span>
+        </div>
+        <div class="card-body">
+          @if (leagueTeams.length === 0) {
+          <div class="alert alert-info mb-0">
+            No hay equipos inscritos en ligas.
+          </div>
+          } @else {
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Liga</th>
+                  <th>Equipo</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (
+                relation of leagueTeams;
+                track relation.leagueId + '-' + relation.teamId
+                ) {
+                <tr>
+                  <td>
+                    {{ relation.leagueName }}
+                  </td>
+                  <td>
+                    {{ relation.teamName }}
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-outline-danger btn-sm" (click)="quitarEquipo(
+                              relation.leagueId,
+                              relation.teamId
+                            )">
+                      Quitar
+                    </button>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
